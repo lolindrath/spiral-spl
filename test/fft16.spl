@@ -1,0 +1,56 @@
+;; compose
+(template (compose A_ B_)
+  [ A_.in_size == B_.out_size ]
+  ( B_( $in, $t0, 0, 0, 1, 1 )
+    A_( $t0, $out, 0, 0, 1, 1 )))
+
+;; tensor
+(template (tensor A_ B_)
+  [ ]
+  (
+  ))
+
+;; L
+(template (L ) []
+  (
+  ))
+
+;; T
+(template (T ) []
+ (
+ ))
+
+;; W
+(template (W n_ k_) [n_>0]
+  (
+  	pow(pow(e 2*pi*i/n) k)
+  ))
+
+;; I
+(template (I n_) [n_>0]
+  (do $i0 = 0,$in.size-1
+    $out($i0) = $in($i0)
+	end
+  ))
+
+;; F
+(template (F n_) [n_>0]
+  (do $0 = 0,n_-1
+    $out($i0) = 0
+	do $i1 = 0,n_-1
+	  $r0 = $i0 * $i1
+	  $f0 = W(n_ $r0) * $in($i1)
+	  $out($0) = $out($i0) + $f0
+	end
+  end))
+
+(define F4
+  (compose
+    (tensor (F 2) (I 2)) (T 4 2)
+	(tensor (I 2) (F 2)) (L 4 2)))
+
+#subname fft16
+(compose
+  (tensor F4 (I 4)) (T 16 4)
+  (tensor (I 4) F4) (L 16 4))
+

@@ -1,0 +1,15 @@
+;; compose
+(template (compose A_ B_)
+  [ A_.in_size == B_.out_size ]
+  ( B_( $in, $t0, 0, 0, 1, 1 )
+    A_( $t0, $out, 0, 0, 1, 1 )))
+
+;; I
+(template (I n_) [n_>0]
+  (do $i0 = 0,$in.size-1
+    $out($i0) = $in($i0)
+	end
+  ))
+
+#subname simple
+(compose (I 2) (I 2))

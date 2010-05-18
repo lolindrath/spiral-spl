@@ -1,0 +1,33 @@
+(template (F 2) [0 == 0]
+  (
+	$out(0) = $in(0) + $in(1)
+ 	$out(1) = $in(0) - $in(1)
+  )
+)
+10.000000
+
+(define F4 (compose (tensor F2 (I 2) ) (T 4 2) (tensor (I 2) F2 ) (L 4 2) ) )
+(F4)
+
+612.750000
+
+(define F4 (compose (tensor F2 (I 2) ) (T 4 2) (tensor (I 2) F2 ) (L 4 2) ) )
+(define F8 (compose (tensor F2 (I 4) ) (T 8 4) (tensor (I 2) F4 ) (L 8 2) ) )
+(F8)
+816.090881
+
+(define F4 (compose (tensor F2 (I 2) ) (T 4 2) (tensor (I 2) F2 ) (L 4 2) ) )
+(define F8 (compose (tensor F4 (I 2) ) (T 8 2) (tensor (I 4) F2 ) (L 8 4) ) )
+(define F16 (compose (tensor F8 (I 2) ) (T 16 2) (tensor (I 8) F2 ) (L 16 8) ) )
+(define F32 (compose (tensor F16 (I 2) ) (T 32 2) (tensor (I 16) F2 ) (L 32 16) 
+) )
+F32
+908.571411
+
+(define F4 (compose (tensor F2 (I 2) ) (T 4 2) (tensor (I 2) F2 ) (L 4 2) ) )
+(define F8 (compose (tensor F4 (I 2) ) (T 8 2) (tensor (I 4) F2 ) (L 8 4) ) )
+(define F16 (compose (tensor F8 (I 2) ) (T 16 2) (tensor (I 8) F2 ) (L 16 8) ) )
+(define F32 (compose (tensor F16 (I 2) ) (T 32 2) (tensor (I 16) F2 ) (L 32 16) 
+) )
+F32
+888.849304

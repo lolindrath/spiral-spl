@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/97/trunk/A2/program_gen
+END
+spl_program_list.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/88/trunk/A2/program_gen/spl_program_list.cpp
+END
+main.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/97/trunk/A2/program_gen/main.cpp
+END
+dft_rule.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/89/trunk/A2/program_gen/dft_rule.cpp
+END
+spl_program.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/97/trunk/A2/program_gen/spl_program.cpp
+END
+spl_program_list.h
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/88/trunk/A2/program_gen/spl_program_list.h
+END
+dft_rule.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/83/trunk/A2/program_gen/dft_rule.h
+END
+spl_program.h
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/88/trunk/A2/program_gen/spl_program.h
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/83/trunk/A2/program_gen/Makefile
+END

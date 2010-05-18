@@ -1,0 +1,81 @@
+
+(template (F 2) [0 == 0]
+  (
+  	$out(1) = $in(0) - $in(1)
+	$out(0) = $in(0) + $in(1)
+  )
+)
+
+;; T(m, n)
+(template (T m_ n_) [0 == 0]
+  (
+    do $i0 = 0,m_-0
+	  $r0 = $i0
+	  $out($i0) = W(m_,n_,$r0) * $in($i0)
+	end
+  )
+)
+
+;; L(m,n)
+(template (L m_ n_) [n_ != 0]
+  (
+ 	$r0 = m_ / n_
+	do $i0 = 0,n_-0
+		do $i1 = 0,$r0-0
+			$out($r0) = $in($i0)
+		end
+	end
+  )
+)
+
+;; I
+(template (I n_) [n_>0]
+  (do $i0 = 0,$in.size
+    $out($i0) = $in($i0)
+   end
+  ))
+
+;; compose (4)
+(template (compose A_ B_ C_ D_)
+  [ A_.in_size == B_.out_size && B_.in_size == C_.out_size && C_.in_size == D_.out_size ]
+  ( 
+    D_( $in, $t0, 0, 0, 1, 1 )
+    C_( $t0, $t1, 0, 0, 1, 1 )
+    B_( $t1, $t2, 0, 0, 1, 1 )
+    A_( $t2, $out, 0, 0, 1, 1 )
+  ))
+
+;; tensor
+;;(template (tensor A_ B_) [ 0 == 0]
+;;(
+;;  do $i0 = 0, A_.in_size
+;;    B_($in, $t0, 0, 0, 1, 1)
+;;  end
+
+;;  do $i1 = 0, B_.out_size
+;;    A_($t0, $out, 0, 0, 1, 1)
+;;  end
+;;))
+
+(template (tensor A_ B_) [ 0 == 0]
+	(
+		$r0 = A_.in_size * B_.out_size
+		$r1 = $r0 - 1
+		do $i0 = 0,A_.in_size
+;;$t0(0:1:$p2.ny_1 $p2.ny) = call $p2( $x(0:1:$p2.nx_1 $p2.nx) )
+		  B_($in, $t0, 0, 0, 1, 1)
+		end
+		do $i0 = 0,B_.out_size
+;;$y(0:$p2.ny:$p0.ny_1 1) = call $p1( $t0(0:$p2.ny:$r1 1) )
+		  A_($t0, $out, 0, 0, 1, 1)
+		end
+	))
+
+;; (compose (tensor (F 2) (tensor (I 2) (tensor (T 4 2) (tensor (I 2) (F 2))))) (L 4 2))
+
+  (compose
+    (tensor (F 2) (I 2)) (T 4 2)
+	(tensor (I 2) (F 2)) (L 4 2))
+
+
+

@@ -1,0 +1,277 @@
+/* parser for s-expressions */
+
+%language "C++"
+%defines
+%locations
+
+%define parser_class_name "icode_parser"
+
+%{
+#include <cstdlib>
+#include <ICodeStatementList.h>
+#include <iostream>
+
+void eval(ICodeStatementList*);
+%}
+
+%union {
+  int integer;
+  double real;
+  char* complex;
+  char *name;
+  ICodeStatement *iCodeStatement;
+  ICodeStatementList* iCodeStatementList;
+  Expression *expression;
+  Evaluation* evaluation;
+  Identity* identity;
+  //List *l;
+  //Seq *s;
+  //char *c;
+  //char *dir;
+  //StmtList *sl;
+  //enum CmpType cmp;
+  //char *ici;
+  //char *p;
+ 
+  //ICodeSymbol *icode_vec_ind;
+	};
+
+/* declare tokens */
+%token <integer> INTEGER_VALUE
+%token <real> REAL_VALUE
+%token <complex> COMPLEX_VALUE
+%token <name> IDENT IN_IDENT OUT_IDENT INDEX_IDENT FLOAT_IDENT TMP_VEC_IDENT INT_IDENT
+//%token <l> LIST
+//%token <c> COMMENT
+//%token <dir> DIRECTIVE
+//%token <p> ICODE_SCALAR
+//%token <iden> 
+%token DO
+%token END
+//%token TEMPLATE
+//%token DEFINE
+//%token ANDAND
+//%token OROR
+
+//%type <sl> stmt_list
+//%type <node> stmt listelement expr value cond template define call opt int_opt condition compare icode_expr icode_ident pattern icode_dot
+%type <iCodeStatementList> ICODE_STATEMENT_LIST
+%type <iCodeStatement> ASSIGNMENT_STATEMENT DO_STATEMENT END_DO_STATEMENT ICODE_STATEMENT // icode_matrix_call 
+%type <expression> EXPRESSION
+%type <evaluation> VALUE
+%type <identity> IDENTITY VECTOR_REF
+%token <name> W
+//%type <icode_vec_ind> icode_vec_index
+//%type <s> listsequence pattern_list
+
+//%nonassoc <cmp> CMP
+%right '='
+%left '+' '-'
+%left '*' '/'
+%left '('
+%left ')'
+%nonassoc UMINUS
+//%left '.'
+
+%start start
+
+%{
+extern int yylex(yy::icode_parser::semantic_type *yylval, yy::icode_parser::location_type *yylloc);
+
+%}
+
+%%
+
+start: ICODE_STATEMENT_LIST { eval($1);}
+;
+
+ICODE_STATEMENT_LIST: ICODE_STATEMENT ICODE_STATEMENT_LIST { $2->insert($2->begin(),$1); $$ = $2; }
+	| ICODE_STATEMENT { $$ = new ICodeStatementList(); $$->insert($$->begin(),$1); }
+;
+
+//stmt: COMMENT { $$ = new Comment(string($1)); }
+//	| DIRECTIVE { $$ = new Directive(string($1)); }
+//	| template { $$ = $1; templates.push_front((Template*) $1); }
+//	| define { $$ = $1; }
+//	| call { $$ = $1; }
+//;
+
+//template: TEMPLATE '(' IDENT pattern_list ')' cond '(' icode_stmt_list ')' ')' { $$ = new Template(string($3), $4, $6, $8); }
+//;
+
+//pattern_list: pattern pattern_list { $2->insert($1); $$ = $2; }
+//	| pattern { $$ = new Seq($1); }
+//;
+
+//pattern: ICODE_MATRIX_PAT { $$ = new ICodePattern(string($1)); }
+//	| ICODE_SCALAR_PAT { $$ = new ICodePattern(string($1)); }
+//	| INTEGER { $$ = new Integer($1); }
+//;
+
+//define: DEFINE IDENT listsequence ')' 
+//	{ 
+//		$$ = new Define($2, $3); 
+//		SymbolTable *t = SymbolTable::instance();
+//		Symbol *s = new Symbol($2, $$);
+//		t->insert(s);
+//	}
+//;
+
+//call: '(' IDENT listsequence ')' { $$ = new Call($2, $3); }
+//;
+
+/*icode_stmt_list: icode_stmt icode_stmt_list {$2->push_back($1); $$ = $2; }
+	| icode_stmt { $$ = new ICodeStatementList($1); }
+;*/
+
+ICODE_STATEMENT: DO_STATEMENT { $$ = $1; }
+	| END_DO_STATEMENT { $$ = $1; }
+ 	| ASSIGNMENT_STATEMENT { $$ = $1; }
+	//| icode_matrix_call {$$ = $1; }
+;
+
+DO_STATEMENT: DO IDENTITY '=' EXPRESSION ',' EXPRESSION { $$ = new Do($2, $4, $6); }
+;
+
+END_DO_STATEMENT: END { $$ = new EndDo(); }
+;
+
+ASSIGNMENT_STATEMENT: IDENTITY '=' EXPRESSION { $$ = new Assignment( $1, $3); }
+	//| VECTOR_REF '=' EXPRESSION { $$ = new Assignment($1, $3); }
+;
+
+//icode_matrix_call: ICODE_MATRIX_PAT '(' opt ',' opt ',' opt ',' opt ',' opt ',' opt ')' { $$ = new ICode(ICODE_OP_CALL, new ICodePattern(string($1)), $3, $5, $7, $11, $13); }
+//;
+
+/*list: '(' listsequence ')' { $$ = new List($2); }
+;*/
+
+/*listsequence: listelement listsequence { $2->insert($1); $$ = $2; }
+	| listelement { $$ = new Seq($1); }
+;*/
+
+/*listelement: value { $$ = $1; }
+	| call { $$ = $1; }
+	| IDENT 
+	{ 
+		SymbolTable *t = SymbolTable::instance();
+		Symbol *s = t->find(string($1));
+
+		if(s == NULL)
+		{
+			cerr << "Error: symbol undefined: " << $1 << endl;
+			exit(1);
+		}
+		else
+		{
+			cout << "replacing symbol: " << $1 << endl;
+			$$ = ((Define*)s->node)->seq;
+		}
+	}
+;*/
+
+/*cond: '[' condition ']' { $$ = $2; }
+;
+
+condition: condition ANDAND compare { $$ = new List(); }
+	| condition OROR compare { $$ = new List(); }
+	| compare { $$ = $1; }
+;
+
+compare: expr CMP expr { $$ = new Comparison($1, $2, $3); }
+;
+*/
+EXPRESSION: EXPRESSION '+' EXPRESSION {$$ = new Addition($1, $3); }
+	| EXPRESSION '-' EXPRESSION {$$ = new Subtraction($1, $3); }
+	| EXPRESSION '*' EXPRESSION {$$ = new Multiplication($1, $3); }
+	| EXPRESSION '/' EXPRESSION {$$ = new Division($1, $3); }
+	//| icode_dot { $$ = $1; }
+	| '(' EXPRESSION ')' { $$ = $2; }
+	| IDENTITY { $$ = $1;}
+	| VALUE {$$ = $1;}
+	| W'('EXPRESSION','EXPRESSION','EXPRESSION')' {$$ = new TW($3,$5,$7);}
+	//| COMPLEX {$$ = new Identity(new Complex($1));}
+	//| IDENTITY {$$ = new Identity($1);}
+	//| ICODE_MATRIX_PAT { $$ = new ICodePattern(string($1)); }
+	//| ICODE_SCALAR_PAT { $$ = new ICodePattern(string($1)); }
+;
+
+/*icode_expr: opt '+' opt { $$ = new Plus($1, $3); }
+	| opt '-' opt { $$ = new Minus($1, $3); }
+	| opt '*' opt { $$ = new Multiply($1, $3); }
+	| opt '/' opt { $$ = new Divide($1, $3); }
+	| opt { $$ = $1; }
+;
+
+opt: icode_vec_index { $$ = $1; }
+	| icode_func_call { $$ = $1; }
+	| int_opt { $$ = $1; }
+; 
+*/
+
+VALUE:
+	INTEGER_VALUE{ $$ = new Evaluation(new Integer($1));}
+	| REAL_VALUE { $$ = new Evaluation(new Real($1));}
+	| COMPLEX_VALUE{ $$ = new Evaluation(new Complex(*$1));}
+	//| SCALAR { $$ = new Identity(new Scalar($1));}
+	//| VECTOR_REF { $$ = new Identity(new Scalar($1));}
+;
+
+IDENTITY:
+	 INDEX_IDENT { $$ = new Identity(new Scalar(std::string($1), ICodeSymbol::ICODE_INTEGER)); }
+	| FLOAT_IDENT { $$ = new Identity(new Scalar(std::string($1), ICodeSymbol::ICODE_REAL)); }
+	| INT_IDENT { $$ = new Identity(new Scalar(std::string($1),  ICodeSymbol::ICODE_INTEGER)); }
+	| IN_IDENT { $$ = new Identity(new Vector(std::string($1))); }
+	| OUT_IDENT { $$ = new Identity(new Vector(std::string($1))); }
+	| TMP_VEC_IDENT { $$ = new Identity(new Vector(std::string($1))); }
+	| VECTOR_REF {$$ = $1;}
+;
+	
+VECTOR_REF: TMP_VEC_IDENT '(' EXPRESSION ')' { $$ = new Identity(new VectorRef(std::string($1), $3)); }
+	| IN_IDENT '(' EXPRESSION ')' { $$ = new Identity(new VectorRef(std::string($1), $3)); }
+	| OUT_IDENT '(' EXPRESSION ')' { $$ = new Identity(new VectorRef(std::string($1), $3)); }
+;
+
+ /* 
+icode_func_call: IDENT '(' icode_expr icode_expr ')' { $$ = new ICode(ICODE_OP_CALL, (Node*)new Ident(string($1)), $3, $4); }
+	| IDENT '(' icode_expr icode_expr icode_expr ')' { $$ = new ICode(ICODE_OP_CALL, (Node*)new Ident(string($1)), $3, $4, $5); }
+;
+
+int_opt: INTEGER { $$ = new Integer($1); }
+	| INDEX_IDENT { $$ = new ICodeIdent(IDENT_INDEX, string($1)); }
+	| FLOAT_IDENT { $$ = new ICodeIdent(IDENT_COMPLEX, string($1)); }
+	| INT_IDENT { $$ = new ICodeIdent(IDENT_SCALAR, string($1)); }
+	| IN_IDENT { $$ = new ICodeIdent(IDENT_IN, string($1)); }
+	| OUT_IDENT { $$ = new ICodeIdent(IDENT_OUT, string($1)); }
+	| TMP_VEC_IDENT { $$ = new ICodeIdent(IDENT_VEC, string($1)); }
+	| ICODE_SCALAR_PAT { $$ = new ICodePattern(string($1)); }
+	| icode_dot { $$ = $1; }
+;
+
+icode_dot: ICODE_MATRIX_PAT '.' IDENT { $$ = new ICodeDot(new ICodePattern(string($1)), new Ident(string($3))); }
+	| IN_IDENT '.' IDENT { $$ = new ICodeDot(new ICodePattern(string($1)), new Ident(string($3))); }
+	| OUT_IDENT '.' IDENT { $$ = new ICodeDot(new ICodePattern(string($1)), new Ident(string($3))); }
+	| TMP_VEC_IDENT '.' IDENT { $$ = new ICodeDot(new ICodePattern(string($1)), new Ident(string($3))); }
+;
+
+value: INTEGER { $$ = new Integer($1); }
+	| REAL { $$ = new Real($1); }
+	| COMPLEX { $$ = new Complex(string($1)); }
+;
+*/
+/*
+icode_ident: INDEX_IDENT { $$ = new ICodeIdent(IDENT_INDEX, string($1)); }
+	| FLOAT_IDENT { $$ = new ICodeIdent(IDENT_COMPLEX, string($1)); }
+	| INT_IDENT { $$ = new ICodeIdent(IDENT_SCALAR, string($1)); }
+;
+*/
+%%
+
+namespace yy {
+	void icode_parser::error(location const&loc, const std::string& s)
+	{
+		std::cerr << "error at " << loc << ": " << s << std::endl;
+	}
+}
+
+

@@ -1,0 +1,16 @@
+
+Dependencies
+-=-=-=-=-=-=-
+* boost
+* flex
+* bison
+
+Installing and Running
+-=-=-=-=-=-=-=-=-=-=-=-
+Run:
+  make
+
+Then use the 'spl' binary
+  ./spl < f8.spl
+
+

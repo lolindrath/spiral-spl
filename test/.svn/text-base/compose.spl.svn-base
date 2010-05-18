@@ -1,0 +1,4 @@
+(template (compose A_ B_)
+  [ A_.in_size == B_.out_size ]
+  ( B_( $in, $t0, 0, 0, 1, 1 )
+    A_( $t0, $out, 0, 0, 1, 1 )))

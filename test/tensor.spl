@@ -1,0 +1,32 @@
+
+(template (F 2) [0 == 0]
+  (
+	$out(0 1) = $in(0 1) + $in(1 1)
+  	$out(1 1) = $in(0 1) - $in(1 1)
+  )
+)
+;; I
+(template (I n_) [n_>0]
+  (do $i0 = 0,$in.size
+    $out($i0) = $in($i0)
+   end
+  ))
+
+(template (tensor A_ B_) [ 0 == 0]
+	(
+		$r0 = A_.in_size * B_.out_size
+		$r1 = $r0 - 1
+		do $i0 = 0,A_.in_size
+		  B_($in, 0, B_.in_size, $t0, 0, B_.out_size)
+		end
+		do $i0 = 0,B_.out_size
+		  A_($t0, 1, 1, $out, 1, 1)
+		end
+	))
+
+(tensor (F 2) (F 2))
+
+
+
+
+

@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 31
+/svn/!svn/ver/90/trunk/A2/icode
+END
+ICodeSymbol.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/78/trunk/A2/icode/ICodeSymbol.h
+END
+ICodeOptimization.h
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/82/trunk/A2/icode/ICodeOptimization.h
+END
+ICodeProgram.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/90/trunk/A2/icode/ICodeProgram.h
+END
+ICodeElement.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/54/trunk/A2/icode/ICodeElement.h
+END
+SymbolTable.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/78/trunk/A2/icode/SymbolTable.h
+END
+main.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/90/trunk/A2/icode/main.cpp
+END
+ICodeValue.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/80/trunk/A2/icode/ICodeValue.h
+END
+ICodeStatementList.h
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/65/trunk/A2/icode/ICodeStatementList.h
+END
+ICode.ypp
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/81/trunk/A2/icode/ICode.ypp
+END
+ICode.l
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/66/trunk/A2/icode/ICode.l
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/90/trunk/A2/icode/Makefile
+END
+ICodeStatement.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/79/trunk/A2/icode/ICodeStatement.h
+END

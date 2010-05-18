@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 30
+/svn/!svn/ver/93/trunk/A2/test
+END
+types.spl
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/22/trunk/A2/test/types.spl
+END
+compose.spl
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/31/trunk/A2/test/compose.spl
+END
+fft16.spl
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/37/trunk/A2/test/fft16.spl
+END
+f2.spl
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/74/trunk/A2/test/f2.spl
+END
+f4.spl
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/91/trunk/A2/test/f4.spl
+END
+simple.spl
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/37/trunk/A2/test/simple.spl
+END
+tensor.spl
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/76/trunk/A2/test/tensor.spl
+END
+f8.spl
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/72/trunk/A2/test/f8.spl
+END
+templates.spl
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/30/trunk/A2/test/templates.spl
+END
+lists.sql
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/33/trunk/A2/test/lists.sql
+END
+broken.spl
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/93/trunk/A2/test/broken.spl
+END
+new-f4.spl
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/74/trunk/A2/test/new-f4.spl
+END
