@@ -185,68 +185,12 @@ Node *match_param(Node *n, Seq *pat, Seq *opts, Node *in, Node *in_offset, Node 
 		{
 			Call *c = (Call*)left;
 			Node *n = *(c->seq->s.begin());
-			//cout << "DOT->CALL(" << c->ident << "): " << n->type << endl;
 
-			if(n->type == NODE_CALL)
+			// This can be a really deep call tree, find the bottom
+			while(n->type == NODE_CALL)
 			{
-				//another call level deep
 				c = (Call*)n;
 				n = *(c->seq->s.begin());
-
-				if(n->type == NODE_CALL)
-				{
-					c = (Call*)n;
-					n = *(c->seq->s.begin());
-					//FIXME: I should be recursive!!
-				if(n->type == NODE_CALL)
-				{
-					c = (Call*)n;
-					n = *(c->seq->s.begin());
-					//FIXME: I should be recursive!!
-				if(n->type == NODE_CALL)
-				{
-					c = (Call*)n;
-					n = *(c->seq->s.begin());
-					//FIXME: I should be recursive!!
-				if(n->type == NODE_CALL)
-				{
-					c = (Call*)n;
-					n = *(c->seq->s.begin());
-					//FIXME: I should be recursive!!
-				if(n->type == NODE_CALL)
-				{
-					c = (Call*)n;
-					n = *(c->seq->s.begin());
-					//FIXME: I should be recursive!!
-				if(n->type == NODE_CALL)
-				{
-					c = (Call*)n;
-					n = *(c->seq->s.begin());
-					//FIXME: I should be recursive!!
-				if(n->type == NODE_CALL)
-				{
-					c = (Call*)n;
-					n = *(c->seq->s.begin());
-					//FIXME: I should be recursive!!
-				if(n->type == NODE_CALL)
-				{
-					c = (Call*)n;
-					n = *(c->seq->s.begin());
-					//FIXME: I should be recursive!!
-				if(n->type == NODE_CALL)
-				{
-					c = (Call*)n;
-					n = *(c->seq->s.begin());
-					//FIXME: I should be recursive!!
-				}
-				}
-				}
-				}
-				}
-				}
-				}
-				}
-				}
 			}
 
 			return n;
