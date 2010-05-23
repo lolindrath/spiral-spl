@@ -28,7 +28,7 @@ for file in ./fft*.spl ; do
 		exit 1
 	fi
 
-	g++ -o $file.exe -O3 $file.icode.cpp
+	g++ -o $file.exe -O3 -L/site/local/papi_64-3.7.0/lib -I/site/local/papi_64-3.7.0/include $file.icode.cpp /site/local/papi_64-3.7.0/lib/libpapi.a
 	if [ "$?" -ne "0" ] ; then
 		echo "COMPILE failed!"
 		exit 1
