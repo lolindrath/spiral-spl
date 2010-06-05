@@ -5,34 +5,35 @@
 %%-export([skeleton/1,ct/0,transform/1,loop_merge/1,rule]).
 -compile(export_all).
 -import(lists).
+-import(io).
 
 %% representation of the Coolie-Tukey DFT factorization 
 ct() ->
 	[{tensor,{dft,k},{i,m}},{t,n,m},{tensor,{i,k},{dft,m}},{l,n,k}].
 
 simple() -> 
-	[{tensor,{i,4},{dft,4}},{l,8,4}].
+	[{tensor,{i,4},{dft,2}},{l,8,4}].
 	%[{tensor,{i,m},{dft,n}},{l,mn,m}].
 
 %% apply all the transformations to the formula
-transform(Size, L) -> rule_35(rule_28(loop_merge(skeleton(Size, L)))).
+transform(L) -> rule_35(rule_28(loop_merge(skeleton(L)))).
 
 %% Table 2 - Rules to expand the skeleton
-skeleton(Size, L) -> skeleton(Size, L, []).
+skeleton(L) -> skeleton(L, []).
 
-% Rule 20
-skeleton(Size, [{tensor,A,{i,K}}|T], Result) -> skeleton(Size, T, [{sigma,Size,[{scatter,[{i,Size},{j,K}]},A,{gather,[{i,Size},{j,K}]}]}|Result]);
+% Rule 20 - for dft
+skeleton([{tensor,{dft,M},{i,K}}|T], Result) -> io:format("rule 20~n"), skeleton([{sigma,K,[{scatter,[{i,M},{j,K}]},{dft,M},{gather,[{i,M},{j,K}]}]}|T], Result);
 % Rule 21
-skeleton(Size, [{tensor,{i,K},A}|T], Result) -> skeleton(Size, T, [{sigma,Size,[{scatter,[{j,K},{i,Size}]},A,{gather,[{j,K},{i,Size}]}]}|Result]);
+skeleton([{tensor,{i,K},{dft,M}}|T], Result) -> io:format("rule 21 ~n"), skeleton([{sigma,K,[{scatter,[{j,K},{i,M}]},{dft,M},{gather,[{j,K},{i,M}]}]}|T], Result);
 % wrap up permutations
-skeleton(Size, [{t,N,M}|T], Result) -> skeleton(Size, T, [{perm,{t,N,M}}|Result]);
-skeleton(Size, [{i,K}|T], Result) -> skeleton(Size, T, [{perm,{i,K}}|Result]);
-skeleton(Size, [{l,N,K}|T], Result) -> skeleton(Size, T, [{perm,{l,N,K}}|Result]);
+skeleton([{t,N,M}|T], Result) -> skeleton([{perm,{t,N,M}}|T], Result);
+skeleton([{i,K}|T], Result) -> skeleton([{perm,{i,K}}|T], Result);
+skeleton([{l,N,K}|T], Result) -> io:format("wrapping L~n"), skeleton([{perm,{l,N,K}}|T], Result);
 % default - if we didn't transform it then pass it on
-skeleton(Size, [H|T], Result) -> skeleton(Size, T, [H|Result]);
+skeleton([H|T], Result) -> skeleton(T, [H|Result]);
 % SPL equation passed in is now empty, reverse the result we
 % created to be in a more logical order
-skeleton(_Size, [], Result) -> lists:reverse(Result).
+skeleton([], Result) -> lists:reverse(Result).
 
 %% Table 3 - Loop merging rules
 loop_merge(L) -> loop_merge(L, []).
@@ -60,13 +61,17 @@ rule_35([H|T], Result) -> rule_35(T, [H|Result]);
 rule_35([], Result) -> lists:reverse(Result).
 
 %% code gen
-%code_gen(Size, Formula) -> code_gen(Size, Formula, []).
+code_gen(Formula) -> code_gen(Formula, []).
 
-%code_gen(Size, [H|T], Result) -> I;
-%code_gen(Size, [H|T], Result) -> .
+code_gen([{sigma,K,L}|T], Result) -> io:format("for(int j=0;j<~s;j++){~n", [K]), code_gen([code_gen(L)|T], Result), io:format("}~n");
+code_gen([{scatter,L}|T], Result) -> io:format("for(int i=0;i<~s;i++) t0[i] = x[i+2*j];~n", []), code_gen(T, Result);
+code_gen([{dft,_N}|T], Result) -> io:format("dft..~n"), code_gen(T, Result);
+code_gen([{gather,L}|T], Result) -> io:format("gather...~n"), code_gen(T, Result);
+code_gen([[]], Result) -> Result;
+code_gen([], Result) -> Result.
 
 
 
 
 
-
+%%
