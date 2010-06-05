@@ -1,0 +1,10 @@
+*.beam
+*.o
+*.lex.c
+*.output
+*.tab.cpp
+*.tab.hpp
+location.hh
+position.hh
+stack.hh
+
